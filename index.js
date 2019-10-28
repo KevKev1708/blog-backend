@@ -1,9 +1,9 @@
-let express = require("express");
-let bodyParser = require("body-parser");
-let app = express();
+const express = require("express");
+const bodyParser = require("body-parser");
+const app = express();
 const sqlite3 = require("sqlite3").verbose();
-let db = new sqlite3.Database("database.sqlite");
-let fehler = require("./errors")
+const db = new sqlite3.Database("database.sqlite");
+const fehler = require("./errors")
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
