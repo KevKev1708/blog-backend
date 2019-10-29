@@ -19,7 +19,7 @@ app.use("/", express.static('static'));
 
 app.get("/blogs", (req, res) => {
 
-    let sql = `SELECT title, body, author FROM posts`;
+    let sql = `SELECT title, body, author, userId FROM posts`;
     db.all(sql, [], (err, rows) => {
 
         if (err) {
@@ -31,7 +31,7 @@ app.get("/blogs", (req, res) => {
 
 app.get("/blogs/:id", (req, res) => {
 
-    let sql = `SELECT title, body, author FROM posts`;
+    let sql = `SELECT title, body, author, userId FROM posts`;
     db.all(sql, [], (err, rows) => {
         if (err) {
             throw err;
@@ -40,6 +40,36 @@ app.get("/blogs/:id", (req, res) => {
             res.json(fehler);
         }
         res.json(rows[req.params.id]);
+    });
+});
+
+app.get("/users", (req, res) => {
+
+    let sql = `SELECT Vorname, Nachname, email, website FROM Users`;
+    db.all(sql, [], (err, rows) => {
+
+        if (err) {
+            throw err;
+        }
+        res.json(rows);
+    });
+});
+
+app.get("/users/:id", (req, res) => {
+    let response = {};
+
+    let sql = `SELECT Vorname, Nachname, email, website FROM Users WHERE id = ?`;
+    db.all(sql, [req.params.id], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        let user = rows[0];
+
+        response.name = user.Vorname + " " + user.Nachname;
+        response.email = user.email;
+        response.website = user.website;
+
+        res.json(response);
     });
 });
 
