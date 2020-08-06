@@ -4,13 +4,10 @@ const app = express();
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("database.sqlite");
 const fehler = require("./errors")
+const cors = require("cors");
 
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "*");
-    res.header("Access-Control-Allow-Methods", "*")
-    next();
-});
+
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -43,7 +40,7 @@ app.get("/blogs/:id", (req, res) => {
 
 app.get("/users", (req, res) => {
 
-    let sql = `SELECT Vorname, Nachname, email, website FROM Users`;
+    let sql = `SELECT id, Vorname, Nachname, email, website FROM Users`;
     db.all(sql, [], (err, rows) => {
 
         if (err) {
@@ -73,10 +70,23 @@ app.get("/users/:id", (req, res) => {
 
 app.post("/blogs", (req, res) => {
 
-    let sql = 'INSERT INTO posts(title, body, author) VALUES(?, ?, ?)';
-    db.run(sql, [req.body.title, req.body.body, req.body.author], err => {
+    let sql = 'INSERT INTO posts(title, body, userId) VALUES(?, ?, ?)';
+    db.run(sql, [req.body.title, req.body.body, req.body.userId], err => {
         if (err) {
-            res.json({ success: false });
+            console.error(err)
+            return res.json({ success: false });
+        }
+        res.json({ success: true });
+    });
+});
+
+app.post("/users", (req, res) => {
+
+    let sql = 'INSERT INTO Users(Vorname, Nachname, email) VALUES(?, ?, ?)';
+    db.run(sql, [req.body.firstn, req.body.lastn, req.body.email], err => {
+        if (err) {
+            console.error(err)
+            return res.json({ success: false });
         }
         res.json({ success: true });
     });
