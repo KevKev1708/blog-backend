@@ -7,14 +7,14 @@ const posts = require('./posts');
 const users = require('./users');
 
 
-app.use('/users', users)
-app.use('/posts', posts);
-
-
-
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+
+app.use('/users', users)
+app.use('/posts', posts);
+
 
 app.listen(8080);
