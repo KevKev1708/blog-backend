@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 
 app.use('/users', users)
 app.use('/posts', posts);
+app.use('/static', express.static('./static'));
 
 
 app.listen(8080);
