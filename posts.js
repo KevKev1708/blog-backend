@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
 
-  let sql = `SELECT title, body, author, userId FROM posts`;
+  let sql = `SELECT id, title, body, author, userId FROM posts`;
   db.all(sql, [], (err, rows) => {
 
     if (err) {
@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
 
 router.get("/:id", (req, res) => {
 
-  let sql = `SELECT title, body, author, userId FROM posts`;
+  let sql = `SELECT id, title, body, author, userId FROM posts`;
   db.all(sql, [], (err, rows) => {
     if (err) {
       throw err;
@@ -31,10 +31,10 @@ router.get("/:id", (req, res) => {
   });
 });
 
-router.post("/", (req, res) => {
+router.delete("/:id", (req, res) => {
 
-  let sql = 'INSERT INTO posts(title, body, userId) VALUES(?, ?, ?)';
-  db.run(sql, [req.body.title, req.body.body, req.body.userId], err => {
+  let sql = 'DELETE FROM posts WHERE id = ?';
+  db.run(sql, [req.params.id], err => {
     if (err) {
       console.error(err)
       return res.json({ success: false });
